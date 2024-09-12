@@ -308,38 +308,15 @@
 
 </div>
 
+<!-- Real-time validation script -->
 <script>
-    // Initialize searchable dropdown
-    $(document).ready(function() {
-        $('.select2-dropdown').select2({
-            placeholder: "Select a postcode",
-            allowClear: true
-        });
-    });
-
-    // Show/Hide Support Coordinator fields based on contact preference
-    const contactCoordinator = document.getElementById('contact_coordinator');
-    const contactParticipant = document.getElementById('contact_participant');
-    const supportCoordinatorDetails = document.getElementById('support_coordinator_details');
-
-    contactCoordinator.addEventListener('change', function() {
-        if (contactCoordinator.checked) {
-            supportCoordinatorDetails.classList.remove('hidden');
-        }
-    });
-
-    contactParticipant.addEventListener('change', function() {
-        if (contactParticipant.checked) {
-            supportCoordinatorDetails.classList.add('hidden');
-        }
-    });
-
-    // Real-time validation for phone and email
+    // Real-time validation for phone and email fields
     const phoneField = document.getElementById('participant_phone');
     const emailField = document.getElementById('participant_email');
+    const phonePattern = /^04\d{8}$/;
+    const emailPattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
-    phoneField.addEventListener('input', function() {
-        const phonePattern = /^04\d{8}$/;
+    phoneField.addEventListener('input', function () {
         if (phonePattern.test(phoneField.value)) {
             phoneField.classList.remove('input-error');
             phoneField.classList.add('input-success');
@@ -349,8 +326,7 @@
         }
     });
 
-    emailField.addEventListener('input', function() {
-        const emailPattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+    emailField.addEventListener('input', function () {
         if (emailPattern.test(emailField.value)) {
             emailField.classList.remove('input-error');
             emailField.classList.add('input-success');
@@ -358,16 +334,6 @@
             emailField.classList.remove('input-success');
             emailField.classList.add('input-error');
         }
-    });
-
-    // Show success message on form submission
-    const submitButton = document.querySelector('button[type="submit"]');
-    const form = document.querySelector('form');
-    const successMessage = document.getElementById('success_message');
-    submitButton.addEventListener('click', function(event) {
-        event.preventDefault(); // Simulating form submission
-        form.classList.add('hidden');
-        successMessage.classList.remove('hidden');
     });
 </script>
 

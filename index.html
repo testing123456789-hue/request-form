@@ -70,7 +70,7 @@
 
         .form-section {
             margin-top: 20px;
-            padding-bottom: 15px; /* Consistent padding for symmetry */
+            padding-bottom: 15px;
         }
 
         .form-instructions {
@@ -169,61 +169,7 @@
                 <option value="3000">3000 – Melbourne</option>
                 <option value="3001">3001 – Melbourne (St Kilda Road Central)</option>
                 <option value="3002">3002 – East Melbourne</option>
-                <option value="3003">3003 – West Melbourne</option>
-                <option value="3004">3004 – Melbourne (St Kilda Road)</option>
-                <option value="3005">3005 – World Trade Centre</option>
-                <option value="3006">3006 – Southbank</option>
-                <option value="3008">3008 – Docklands</option>
-                <option value="3010">3010 – University of Melbourne</option>
-                <option value="3011">3011 – Footscray</option>
-                <option value="3012">3012 – Brooklyn, Kingsville, Tottenham</option>
-                <option value="3013">3013 – Yarraville</option>
-                <option value="3015">3015 – Newport, Williamstown</option>
-                <option value="3016">3016 – Williamstown</option>
-                <option value="3017">3017 – Altona</option>
-                <option value="3018">3018 – Altona, Seaholme</option>
-                <option value="3019">3019 – Braybrook</option>
-                <option value="3020">3020 – Sunshine, Albion</option>
-                <option value="3021">3021 – St Albans, Kealba, Kings Park</option>
-                <option value="3022">3022 – Ardeer</option>
-                <option value="3023">3023 – Caroline Springs, Burnside</option>
-                <option value="3024">3024 – Werribee</option>
-                <option value="3030">3030 – Werribee, Point Cook</option>
-                <option value="3031">3031 – Kensington, Flemington</option>
-                <option value="3032">3032 – Maribyrnong, Ascot Vale</option>
-                <option value="3033">3033 – Keilor East</option>
-                <option value="3034">3034 – Keilor</option>
-                <option value="3035">3035 – Avondale Heights</option>
-                <option value="3036">3036 – Keilor Lodge</option>
-                <option value="3037">3037 – Sydenham</option>
-                <option value="3038">3038 – Taylors Lakes</option>
-                <option value="3039">3039 – Moonee Ponds</option>
-                <option value="3040">3040 – Essendon</option>
-                <option value="3041">3041 – Strathmore</option>
-                <option value="3042">3042 – Airport West</option>
-                <option value="3043">3043 – Gladstone Park</option>
-                <option value="3044">3044 – Pascoe Vale</option>
-                <option value="3045">3045 – Melbourne Airport</option>
-                <option value="3046">3046 – Glenroy</option>
-                <option value="3047">3047 – Broadmeadows</option>
-                <option value="3048">3048 – Coolaroo</option>
-                <option value="3049">3049 – Tullamarine</option>
-                <option value="3050">3050 – Royal Melbourne Hospital</option>
-                <option value="3051">3051 – North Melbourne</option>
-                <option value="3052">3052 – Parkville</option>
-                <option value="3053">3053 – Carlton</option>
-                <option value="3054">3054 – Princes Hill</option>
-                <option value="3055">3055 – Brunswick West</option>
-                <option value="3056">3056 – Brunswick</option>
-                <option value="3057">3057 – Coburg</option>
-                <option value="3058">3058 – Coburg North</option>
-                <option value="3059">3059 – Greenvale</option>
-                <option value="3060">3060 – Fawkner</option>
-                <option value="3061">3061 – Campbellfield</option>
-                <option value="3062">3062 – Somerton</option>
-                <option value="3063">3063 – Oaklands Junction</option>
-                <option value="3064">3064 – Craigieburn</option>
-                <!-- Add more postcodes as needed -->
+                <!-- Add the rest of the postcodes here -->
             </select>
             <p class="note">Please note, we only service metro Melbourne suburbs.</p>
         </div>
@@ -333,6 +279,23 @@
         } else {
             emailField.classList.remove('input-success');
             emailField.classList.add('input-error');
+        }
+    });
+
+    // Show/Hide Support Coordinator details based on contact preference
+    const contactCoordinator = document.getElementById('contact_coordinator');
+    const contactParticipant = document.getElementById('contact_participant');
+    const supportCoordinatorDetails = document.getElementById('support_coordinator_details');
+
+    contactCoordinator.addEventListener('change', function() {
+        if (contactCoordinator.checked) {
+            supportCoordinatorDetails.classList.remove('hidden');
+        }
+    });
+
+    contactParticipant.addEventListener('change', function() {
+        if (contactParticipant.checked) {
+            supportCoordinatorDetails.classList.add('hidden');
         }
     });
 </script>

@@ -13,19 +13,27 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 700px;
             margin: auto;
             background: #fff;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             border-radius: 10px;
         }
 
         h2 {
             text-align: center;
             color: #2c5f2d;
-            font-size: 24px;
-            margin-bottom: 20px;
+            font-size: 28px;
+            margin-bottom: 25px;
+        }
+
+        h3 {
+            color: #2c5f2d;
+            margin-bottom: 15px;
+            font-size: 22px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
         }
 
         label {
@@ -37,10 +45,10 @@
 
         input[type="text"], input[type="email"], input[type="tel"], textarea, select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-top: 5px;
             border-radius: 5px;
-            border: 1px solid #ddd;
+            border: 1px solid #ccc;
             box-sizing: border-box;
             font-size: 16px;
         }
@@ -58,30 +66,31 @@
             border-radius: 5px;
             cursor: pointer;
             width: 100%;
-            margin-top: 20px;
-            font-size: 18px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 25px;
+            font-size: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
         }
 
         button:hover {
             background-color: #3c8f3d;
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
         }
 
         .form-section {
-            margin-top: 20px;
+            margin-top: 25px;
             padding-bottom: 15px;
         }
 
         .form-instructions {
-            font-size: 14px;
+            font-size: 16px;
             color: #555;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            line-height: 1.6;
         }
 
         .note {
-            font-size: 12px;
+            font-size: 14px;
             color: #888;
             margin-top: 5px;
         }
@@ -99,23 +108,10 @@
             border-color: green;
         }
 
-        /* Fix the alignment issue with the Select2 dropdown */
-        .select2-container {
-            width: 100% !important;
-        }
-
-        .select2-container--default .select2-selection--single {
-            height: 42px;
-            display: flex;
-            align-items: center;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-
-        .select2-selection__arrow {
-            height: 42px;
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
         }
 
         /* Responsive Design */
@@ -126,15 +122,13 @@
 
             button {
                 padding: 12px;
-                font-size: 16px;
+                font-size: 18px;
             }
         }
     </style>
 
     <!-- Include jQuery and Select2 for searchable dropdown functionality -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
 </head>
 <body>
@@ -149,29 +143,62 @@
         Our team aims to respond to your request within 1 business day. For urgent inquiries, feel free to call us at 0421 455 995.
     </p>
 
-    <form action="/submit-service-request" method="post">
-        <!-- Participant Details and Location Section -->
-        <div class="form-section" id="participant_section">
-            <h3>Participant Details & Location</h3>
-            <label for="participant_name">Full Name <span class="optional">(Optional if contacting Support Coordinator)</span></label>
+    <form id="serviceRequestForm" action="/submit-service-request" method="post">
+        <!-- Who to Contact Section -->
+        <div class="form-section">
+            <h3>Who should we contact?</h3>
+            <div class="radio-group">
+                <label><input type="radio" id="contact_participant" name="contact_preference" value="Contact participant directly" required> Contact participant directly</label>
+                <label><input type="radio" id="contact_coordinator" name="contact_preference" value="Contact support coordinator"> Contact support coordinator</label>
+            </div>
+        </div>
+
+        <!-- Participant Details Section -->
+        <div class="form-section hidden" id="participant_details_section">
+            <h3>Participant Details</h3>
+            <label for="participant_name">Full Name *</label>
             <input type="text" id="participant_name" name="participant_name">
+            <span class="error-message" id="participant_name_error"></span>
 
-            <label for="participant_phone">Phone</label>
-            <input type="tel" id="participant_phone" name="participant_phone" placeholder="e.g., 0421 455 995" pattern="^04\d{8}$" required>
+            <label for="participant_phone">Phone *</label>
+            <input type="tel" id="participant_phone" name="participant_phone" placeholder="e.g., 0421 455 995" pattern="^04\d{8}$">
+            <span class="error-message" id="participant_phone_error"></span>
 
-            <label for="participant_email">Email</label>
-            <input type="email" id="participant_email" name="participant_email" required>
+            <label for="participant_email">Email *</label>
+            <input type="email" id="participant_email" name="participant_email">
+            <span class="error-message" id="participant_email_error"></span>
 
-            <label for="location">Location or Postcode</label>
-            <select id="location" name="location" class="select2-dropdown" required>
-                <option value="">-- Select a postcode --</option>
-                <!-- Full Metro Melbourne Postcodes and Suburbs List -->
-                <option value="3000">3000 – Melbourne</option>
-                <option value="3001">3001 – Melbourne (St Kilda Road Central)</option>
-                <option value="3002">3002 – East Melbourne</option>
-                <!-- Add the rest of the postcodes here -->
-            </select>
+            <label for="location">Location or Postcode *</label>
+            <input type="text" id="location" name="location">
+            <span class="error-message" id="location_error"></span>
             <p class="note">Please note, we only service metro Melbourne suburbs.</p>
+        </div>
+
+        <!-- Participant Name (For Support Coordinator) -->
+        <div class="form-section hidden" id="participant_name_section">
+            <h3>Participant Details</h3>
+            <label for="participant_name_sc">Participant Full Name *</label>
+            <input type="text" id="participant_name_sc" name="participant_name_sc">
+            <span class="error-message" id="participant_name_sc_error"></span>
+        </div>
+
+        <!-- Support Coordinator Details Section -->
+        <div class="form-section hidden" id="support_coordinator_section">
+            <h3>Support Coordinator Details</h3>
+            <label for="coordinator_name">Full Name *</label>
+            <input type="text" id="coordinator_name" name="coordinator_name">
+            <span class="error-message" id="coordinator_name_error"></span>
+
+            <label for="coordinator_organisation">Organisation</label>
+            <input type="text" id="coordinator_organisation" name="coordinator_organisation">
+
+            <label for="coordinator_phone">Phone *</label>
+            <input type="tel" id="coordinator_phone" name="coordinator_phone" placeholder="e.g., 0421 455 995">
+            <span class="error-message" id="coordinator_phone_error"></span>
+
+            <label for="coordinator_email">Email *</label>
+            <input type="email" id="coordinator_email" name="coordinator_email">
+            <span class="error-message" id="coordinator_email_error"></span>
         </div>
 
         <!-- Service Interest Section -->
@@ -212,29 +239,6 @@
             <label><input type="radio" name="accessing_services" value="As a private customer"> As a private customer</label>
         </div>
 
-        <!-- Contact Preference Section -->
-        <div class="form-section radio-group">
-            <h3>Who should we contact?</h3>
-            <label><input type="radio" id="contact_participant" name="contact_preference" value="Contact participant directly" required> Contact participant directly</label>
-            <label><input type="radio" id="contact_coordinator" name="contact_preference" value="Contact support coordinator"> Contact support coordinator</label>
-        </div>
-
-        <!-- Support Coordinator Details (Hidden unless Contact Coordinator is selected) -->
-        <div id="support_coordinator_details" class="hidden">
-            <h3>Support Coordinator Details</h3>
-            <label for="coordinator_name">Full Name *</label>
-            <input type="text" id="coordinator_name" name="coordinator_name" required>
-
-            <label for="coordinator_organisation">Organisation</label>
-            <input type="text" id="coordinator_organisation" name="coordinator_organisation">
-
-            <label for="coordinator_phone">Phone *</label>
-            <input type="tel" id="coordinator_phone" name="coordinator_phone" required>
-
-            <label for="coordinator_email">Email *</label>
-            <input type="email" id="coordinator_email" name="coordinator_email" required>
-        </div>
-
         <!-- Confirmation Checkbox -->
         <div class="form-section">
             <label><input type="checkbox" name="confirmation" required> I confirm that the information provided is correct, and I agree to be contacted by Green Thumb Backyard Co. regarding my service request.</label>
@@ -256,48 +260,137 @@
 
 <!-- Real-time validation script -->
 <script>
-    // Real-time validation for phone and email fields
-    const phoneField = document.getElementById('participant_phone');
-    const emailField = document.getElementById('participant_email');
-    const phonePattern = /^04\d{8}$/;
-    const emailPattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
-
-    phoneField.addEventListener('input', function () {
-        if (phonePattern.test(phoneField.value)) {
-            phoneField.classList.remove('input-error');
-            phoneField.classList.add('input-success');
-        } else {
-            phoneField.classList.remove('input-success');
-            phoneField.classList.add('input-error');
-        }
-    });
-
-    emailField.addEventListener('input', function () {
-        if (emailPattern.test(emailField.value)) {
-            emailField.classList.remove('input-error');
-            emailField.classList.add('input-success');
-        } else {
-            emailField.classList.remove('input-success');
-            emailField.classList.add('input-error');
-        }
-    });
-
-    // Show/Hide Support Coordinator details based on contact preference
-    const contactCoordinator = document.getElementById('contact_coordinator');
+    // Element References
     const contactParticipant = document.getElementById('contact_participant');
-    const supportCoordinatorDetails = document.getElementById('support_coordinator_details');
+    const contactCoordinator = document.getElementById('contact_coordinator');
+    const participantDetailsSection = document.getElementById('participant_details_section');
+    const participantNameSection = document.getElementById('participant_name_section');
+    const supportCoordinatorSection = document.getElementById('support_coordinator_section');
+    const form = document.getElementById('serviceRequestForm');
 
-    contactCoordinator.addEventListener('change', function() {
-        if (contactCoordinator.checked) {
-            supportCoordinatorDetails.classList.remove('hidden');
-        }
-    });
+    // Input Fields
+    const participantName = document.getElementById('participant_name');
+    const participantPhone = document.getElementById('participant_phone');
+    const participantEmail = document.getElementById('participant_email');
+    const locationField = document.getElementById('location');
 
-    contactParticipant.addEventListener('change', function() {
+    const participantNameSC = document.getElementById('participant_name_sc');
+    const coordinatorName = document.getElementById('coordinator_name');
+    const coordinatorPhone = document.getElementById('coordinator_phone');
+    const coordinatorEmail = document.getElementById('coordinator_email');
+
+    // Error Messages
+    const participantNameError = document.getElementById('participant_name_error');
+    const participantPhoneError = document.getElementById('participant_phone_error');
+    const participantEmailError = document.getElementById('participant_email_error');
+    const locationError = document.getElementById('location_error');
+
+    const participantNameSCError = document.getElementById('participant_name_sc_error');
+    const coordinatorNameError = document.getElementById('coordinator_name_error');
+    const coordinatorPhoneError = document.getElementById('coordinator_phone_error');
+    const coordinatorEmailError = document.getElementById('coordinator_email_error');
+
+    // Show/Hide Sections Based on Contact Preference
+    function updateContactSections() {
         if (contactParticipant.checked) {
-            supportCoordinatorDetails.classList.add('hidden');
+            participantDetailsSection.classList.remove('hidden');
+            participantNameSection.classList.add('hidden');
+            supportCoordinatorSection.classList.add('hidden');
+        } else if (contactCoordinator.checked) {
+            participantDetailsSection.classList.add('hidden');
+            participantNameSection.classList.remove('hidden');
+            supportCoordinatorSection.classList.remove('hidden');
+        } else {
+            participantDetailsSection.classList.add('hidden');
+            participantNameSection.classList.add('hidden');
+            supportCoordinatorSection.classList.add('hidden');
+        }
+    }
+
+    contactParticipant.addEventListener('change', updateContactSections);
+    contactCoordinator.addEventListener('change', updateContactSections);
+
+    // Initial call to set the correct sections
+    updateContactSections();
+
+    // Validation Functions
+    function validateNotEmpty(field, errorField) {
+        if (field.value.trim() === '') {
+            field.classList.add('input-error');
+            field.classList.remove('input-success');
+            errorField.textContent = 'This field is required.';
+            return false;
+        } else {
+            field.classList.remove('input-error');
+            field.classList.add('input-success');
+            errorField.textContent = '';
+            return true;
+        }
+    }
+
+    function validateEmail(field, errorField) {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(field.value.trim())) {
+            field.classList.add('input-error');
+            field.classList.remove('input-success');
+            errorField.textContent = 'Please enter a valid email address.';
+            return false;
+        } else {
+            field.classList.remove('input-error');
+            field.classList.add('input-success');
+            errorField.textContent = '';
+            return true;
+        }
+    }
+
+    function validatePhone(field, errorField) {
+        const phonePattern = /^04\d{8}$/;
+        if (!phonePattern.test(field.value.trim())) {
+            field.classList.add('input-error');
+            field.classList.remove('input-success');
+            errorField.textContent = 'Please enter a valid phone number.';
+            return false;
+        } else {
+            field.classList.remove('input-error');
+            field.classList.add('input-success');
+            errorField.textContent = '';
+            return true;
+        }
+    }
+
+    // Attach Validation Events
+    participantName.addEventListener('input', () => validateNotEmpty(participantName, participantNameError));
+    participantPhone.addEventListener('input', () => validatePhone(participantPhone, participantPhoneError));
+    participantEmail.addEventListener('input', () => validateEmail(participantEmail, participantEmailError));
+    locationField.addEventListener('input', () => validateNotEmpty(locationField, locationError));
+
+    participantNameSC.addEventListener('input', () => validateNotEmpty(participantNameSC, participantNameSCError));
+    coordinatorName.addEventListener('input', () => validateNotEmpty(coordinatorName, coordinatorNameError));
+    coordinatorPhone.addEventListener('input', () => validatePhone(coordinatorPhone, coordinatorPhoneError));
+    coordinatorEmail.addEventListener('input', () => validateEmail(coordinatorEmail, coordinatorEmailError));
+
+    // Form Submission Validation
+    form.addEventListener('submit', function (e) {
+        let isValid = true;
+
+        if (contactParticipant.checked) {
+            isValid &= validateNotEmpty(participantName, participantNameError);
+            isValid &= validatePhone(participantPhone, participantPhoneError);
+            isValid &= validateEmail(participantEmail, participantEmailError);
+            isValid &= validateNotEmpty(locationField, locationError);
+        } else if (contactCoordinator.checked) {
+            isValid &= validateNotEmpty(participantNameSC, participantNameSCError);
+            isValid &= validateNotEmpty(coordinatorName, coordinatorNameError);
+            isValid &= validatePhone(coordinatorPhone, coordinatorPhoneError);
+            isValid &= validateEmail(coordinatorEmail, coordinatorEmailError);
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+            alert('Please fix the errors in the form before submitting.');
         }
     });
+
 </script>
 
 </body>
